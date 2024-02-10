@@ -1,8 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC, useEffect, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { fetchTestData } from "./services/testService";
 
-function App() {
+const App: FC = () => {
+  const [testData, setTestData] = useState<string>();
+
+  useEffect(() => {
+    const getHelloData = async () => {
+      try {
+        const data = await fetchTestData();
+        setTestData(data.message);
+      } catch (error) {
+        console.warn(error);
+      }
+    };
+    getHelloData();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -16,11 +31,11 @@ function App() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Learn React
+          Learn React {testData}
         </a>
       </header>
     </div>
   );
-}
+};
 
 export default App;
