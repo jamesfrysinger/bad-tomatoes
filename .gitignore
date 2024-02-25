@@ -131,4 +131,4 @@ dist
 
 
 # SQL
-.sql
+*.sql
