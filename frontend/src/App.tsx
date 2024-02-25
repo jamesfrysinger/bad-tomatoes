@@ -1,23 +1,17 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import "./App.css";
-import { fetchTestData } from "./services/testService";
+import Search from "./components/common/Search";
+import { ISearchTypes } from "./types/searchTypes";
 
 const App: FC = () => {
-  const [helloData, setHelloData] = useState();
+  const [search, setSearch] = useState<ISearchTypes[]>();
 
-  useEffect(() => {
-    const getHelloData = async () => {
-      try {
-        const data = await fetchTestData();
-        setHelloData(data.message);
-      } catch (error) {
-        console.warn(error);
-      }
-    };
-    getHelloData();
-  }, []);
-
-  return <div className="">{helloData ?? "Error fetching data"}</div>;
+  return (
+    <>
+      <Search setSearch={setSearch} />
+      <div className="">{search?.map((item) => item.primaryTitle)}</div>
+    </>
+  );
 };
 
 export default App;

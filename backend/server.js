@@ -1,7 +1,7 @@
-// server.js
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql");
+
 const app = express();
 const port = process.env.PORT || 3001;
 
@@ -15,20 +15,23 @@ const pool = mysql.createPool({
   database: "bad_tomatoes",
 });
 
-pool.query("SELECT * FROM title_crew", (error, results, fields) => {
-  if (error) {
-    console.error("Error executing query:", error);
-    return;
-  }
-  console.log("Query results:", results);
-});
+app.get("/api/titles", (req, res) => {
+  const searchQuery = req.query.q;
+  const searchPage = req.query.p !== 0 ? req.query.p : 1;
+  const searchPageSize = 100;
+  const searchPageOffset = (searchPage - 1) * searchPageSize;
 
-pool.on("error", (error) => {
-  console.error("Database connection error:", error);
-});
-
-app.get("/api/hello", (req, res) => {
-  res.json({ message: "Hello from the server!" });
+  return pool.query(
+    `SELECT * FROM title_basics WHERE primaryTitle LIKE '%${searchQuery}%' LIMIT ${searchPageSize} OFFSET ${searchPageOffset}`,
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal server error" });
+        return;
+      }
+      res.json(results);
+    }
+  );
 });
 
 app.listen(port, () => {
