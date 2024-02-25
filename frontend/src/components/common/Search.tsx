@@ -8,10 +8,10 @@ interface ISearch {
   setSearch: Dispatch<React.SetStateAction<ISearchTypes[] | undefined>>;
 }
 const Search: FC<ISearch> = ({ setSearch }) => {
-  // const queryParams = new URLSearchParams(window.location.search);
-  // const query = queryParams.get("q");
+  const queryParams = new URLSearchParams(window.location.search);
+  const urlParams = queryParams.get("q") as string;
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState<string>(urlParams);
 
   const fetchSearchData = async (query: string) => {
     try {
@@ -27,9 +27,14 @@ const Search: FC<ISearch> = ({ setSearch }) => {
 
   useEffect(() => {
     const debounceSearch = setTimeout(() => {
+      if (!searchQuery.trim()) {
+        setUrlParam("q", "");
+        setSearch(undefined);
+        return;
+      }
       setUrlParam("q", searchQuery);
       fetchSearchData(searchQuery);
-    }, 500);
+    }, 600);
 
     return () => clearTimeout(debounceSearch);
   }, [searchQuery]);
@@ -37,7 +42,12 @@ const Search: FC<ISearch> = ({ setSearch }) => {
   return (
     <div className="m-10">
       <FormControl fullWidth={true}>
-        <TextField id="search" variant="standard" onChange={handleOnChange} />
+        <TextField
+          id="search"
+          variant="standard"
+          defaultValue={urlParams ?? ""}
+          onChange={handleOnChange}
+        />
       </FormControl>
     </div>
   );

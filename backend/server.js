@@ -21,17 +21,16 @@ app.get("/api/titles", (req, res) => {
   const searchPageSize = 100;
   const searchPageOffset = (searchPage - 1) * searchPageSize;
 
-  return pool.query(
-    `SELECT * FROM title_basics WHERE primaryTitle LIKE '%${searchQuery}%' LIMIT ${searchPageSize} OFFSET ${searchPageOffset}`,
-    (error, results, fields) => {
-      if (error) {
-        console.error("Error executing query:", error);
-        res.status(500).json({ error: "Internal server error" });
-        return;
-      }
-      res.json(results);
+  const sql = `SELECT * FROM title_basics WHERE primaryTitle LIKE '%${searchQuery}%' LIMIT ${searchPageSize} OFFSET ${searchPageOffset}`;
+
+  pool.query(sql, (error, results, fields) => {
+    if (error) {
+      console.error("Error executing query:", error);
+      res.status(500).json({ error: "Internal server error" });
+      return;
     }
-  );
+    res.json(results);
+  });
 });
 
 app.listen(port, () => {

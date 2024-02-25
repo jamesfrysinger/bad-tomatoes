@@ -3,6 +3,7 @@ export const fetchSearchDataService = async (
   page: number
 ) => {
   try {
+    if (!query?.trim()) return;
     const response = await fetch(
       `//localhost:3001/api/titles?q=${query}&p=${page}`
     );
