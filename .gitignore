@@ -133,4 +133,5 @@ dist
 # SQL
 *.sql
 
+# Credentials
 credentials
