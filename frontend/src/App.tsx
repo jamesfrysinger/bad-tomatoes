@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import "./App.css";
 import Search from "./components/common/Search";
 import { ISearchTypes } from "./types/searchTypes";
+import { THEMOVIEDB_KEY } from "./credentials/credentials";
 
 const App: FC = () => {
   const [search, setSearch] = useState<ISearchTypes[]>();
@@ -13,8 +14,7 @@ const App: FC = () => {
       method: "GET",
       headers: {
         accept: "application/json",
-        Authorization:
-          "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjYwYWM5ZDJjZjNmYzk0NWE5NTA1MzY4MGJlMjBkMyIsInN1YiI6IjY1ZGJmN2E2NDUzOWQwMDE4NmJlYzkyNSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7YH_BAUAjLkUmeGqWGzCihAiUOuH5eoSceQiaFY9tvQ",
+        Authorization: THEMOVIEDB_KEY,
       },
     };
 
