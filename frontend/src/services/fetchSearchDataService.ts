@@ -1,17 +1,15 @@
 export const fetchSearchDataService = async (
   query: string | null,
-  page: number
+  page: number,
+  limit?: number
 ) => {
-  try {
-    if (!query?.trim()) return;
-    const response = await fetch(
-      `//localhost:3001/api/titles?q=${query}&p=${page}`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch data from endpoint.");
-    }
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
+  if (!query?.trim()) return;
+  return fetch(
+    `//localhost:3001/api/titles?query=${query}&page=${page}&limit=${limit}`
+  )
+    .then((res) => {
+      if (!res.ok) console.warn("Failed to fetch data from endpoint.");
+      return res.json();
+    })
+    .catch((err) => console.warn(err));
 };

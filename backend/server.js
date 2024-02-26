@@ -16,21 +16,22 @@ const pool = mysql.createPool({
 });
 
 app.get("/api/titles", (req, res) => {
-  const searchQuery = req.query.q;
-  const searchPage = req.query.p !== 0 ? req.query.p : 1;
-  const searchPageSize = 100;
+  const searchQuery = req.query.query;
+  const searchPage = req.query.page !== 0 ? req.query.page : 1;
+  const searchPageSize = Math.min(req.query.limit, 25);
   const searchPageOffset = (searchPage - 1) * searchPageSize;
 
-  const sql = `SELECT * FROM title_basics WHERE primaryTitle LIKE '%${searchQuery}%' LIMIT ${searchPageSize} OFFSET ${searchPageOffset}`;
-
-  pool.query(sql, (error, results, fields) => {
-    if (error) {
-      console.error("Error executing query:", error);
-      res.status(500).json({ error: "Internal server error" });
-      return;
+  return pool.query(
+    `SELECT * FROM title_basics WHERE primaryTitle LIKE '%${searchQuery}%' LIMIT ${searchPageSize} OFFSET ${searchPageOffset}`,
+    (error, results, fields) => {
+      if (error) {
+        console.error("Error executing query:", error);
+        res.status(500).json({ error: "Internal server error" });
+        return;
+      }
+      res.json(results);
     }
-    res.json(results);
-  });
+  );
 });
 
 app.listen(port, () => {

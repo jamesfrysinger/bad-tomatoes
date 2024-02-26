@@ -13,28 +13,26 @@ const Search: FC<ISearch> = ({ setSearch }) => {
 
   const [searchQuery, setSearchQuery] = useState<string>(urlParams);
 
-  const fetchSearchData = async (query: string) => {
-    try {
-      const data = await fetchSearchDataService(query, 1);
-      setSearch(data);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setSearchQuery(e.target.value);
 
   useEffect(() => {
     const debounceSearch = setTimeout(() => {
+      setUrlParam("q", searchQuery);
+
       if (!searchQuery.trim()) {
-        setUrlParam("q", "");
         setSearch(undefined);
         return;
       }
-      setUrlParam("q", searchQuery);
-      fetchSearchData(searchQuery);
-    }, 600);
+
+      fetchSearchDataService(searchQuery, 1, 10)
+        .then((res) => {
+          setSearch(res);
+        })
+        .catch((err) => {
+          console.warn(err);
+        });
+    }, 300);
 
     return () => clearTimeout(debounceSearch);
   }, [searchQuery]);
