@@ -1,7 +1,7 @@
 export const fetchSearchDataService = async (
   query: string | null,
-  page: number,
-  limit?: number
+  page: number = 1,
+  limit: number = 25
 ) => {
   if (!query?.trim()) return;
   return fetch(

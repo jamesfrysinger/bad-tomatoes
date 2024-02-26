@@ -25,7 +25,7 @@ const Search: FC<ISearch> = ({ setSearch }) => {
         return;
       }
 
-      fetchSearchDataService(searchQuery, 1, 10)
+      fetchSearchDataService(searchQuery, 1)
         .then((res) => {
           setSearch(res);
         })
