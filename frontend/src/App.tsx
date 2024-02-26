@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import "./App.css";
 import Search from "./components/common/Search";
 import { ISearchTypes } from "./types/searchTypes";
-import { THEMOVIEDB_KEY } from "./credentials/credentials";
+import { THEMOVIEDB_KEY } from "./config/credentials";
 
 const App: FC = () => {
   const [search, setSearch] = useState<ISearchTypes[]>();
