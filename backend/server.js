@@ -17,7 +17,7 @@ const pool = mysql.createPool({
 
 app.get("/api/titles", (req, res) => {
   const searchQuery = req.query.query;
-  const searchPage = req.query.page !== 0 ? req.query.page : 1;
+  const searchPage = parseInt(req.query.page, 10) || 1;
   const searchPageSize = Math.min(req.query.limit, 25);
   const searchPageOffset = (searchPage - 1) * searchPageSize;
 
