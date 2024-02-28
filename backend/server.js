@@ -7,6 +7,10 @@ const port = process.env.PORT || 3001;
 
 app.use(cors());
 
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
 const pool = mysql.createPool({
   host: "localhost",
   port: 8889,
@@ -32,8 +36,4 @@ app.get("/api/titles", (req, res) => {
       res.json(results);
     }
   );
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });
